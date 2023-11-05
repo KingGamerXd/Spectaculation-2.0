@@ -2,18 +2,6 @@ package me.superischroma.spectaculation.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.function.operation.Operation;
-import com.sk89q.worldedit.function.operation.Operations;
-import com.sk89q.worldedit.session.ClipboardHolder;
-import com.sk89q.worldedit.world.World;
-import com.sk89q.worldedit.world.registry.WorldData;
 import me.superischroma.spectaculation.Spectaculation;
 import me.superischroma.spectaculation.enchantment.Enchantment;
 import me.superischroma.spectaculation.gui.GUI;
@@ -44,11 +32,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -552,32 +539,7 @@ public class SUtil
         return n;
     }
 
-    // not my code
-    public static boolean pasteSchematic(File schematicFile, Location location, boolean withAir)
-    {
-        try
-        {
-            com.sk89q.worldedit.Vector pasteLocation = new com.sk89q.worldedit.Vector(
-                    location.getX(), location.getY(), location.getZ());
-            World pasteWorld = new BukkitWorld(location.getWorld());
-            WorldData pasteWorldData = pasteWorld.getWorldData();
-            Clipboard clipboard = ClipboardFormat.SCHEMATIC.getReader(new FileInputStream(schematicFile)).read(pasteWorldData);
-            ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard, pasteWorldData);
-            EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(pasteWorld, -1);
-            Operation operation = clipboardHolder
-                    .createPaste(editSession, pasteWorldData)
-                    .to(pasteLocation)
-                    .ignoreAirBlocks(!withAir)
-                    .build();
-            Operations.complete(operation);
-            return true;
-        }
-        catch (IOException | WorldEditException ex)
-        {
-            ex.printStackTrace();
-            return false;
-        }
-    }
+
 
     public static void setBlocks(Location c1, Location c2, Material material, boolean applyPhysics)
     {
@@ -601,6 +563,51 @@ public class SUtil
             }
         }
     }
+
+    // https://www.spigotmc.org/threads/schematic-load-paste.302761/page-2
+
+    @SuppressWarnings("deprecation")
+    public static void generate(Location loc, String filename) {
+        try {
+            FileInputStream fis = new FileInputStream(new File(Spectaculation.getPlugin().getDataFolder(), filename));
+            Object nbtData = NBTCompressedStreamTools.class.getMethod("a", InputStream.class).invoke(null, fis);
+            Method getShort  = nbtData.getClass().getMethod("getShort", String.class);
+            Method getByteArray = nbtData.getClass().getMethod("getByteArray", String.class);
+
+            short width = ((short) getShort.invoke(nbtData, "Width"));
+            short height = ((short) getShort.invoke(nbtData, "Height"));
+            short length = ((short) getShort.invoke(nbtData, "Length"));
+
+            byte[] blocks = ((byte[]) getByteArray.invoke(nbtData, "Blocks"));
+            byte[] data = ((byte[]) getByteArray.invoke(nbtData, "Data"));
+
+            fis.close();
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    for (int z = 0; z < length; z++) {
+                        int index = y * width * length + z * width + x;
+                        int b = blocks[index] & 0xFF;
+                        Material m = Material.getMaterial(b);
+                        if (m != Material.AIR) {
+
+                            Block block = new Location(loc.getWorld(),
+                                    loc.getBlockX() - ((int) (width / 2)) + x,
+                                    loc.getBlockY()  + y,
+                                    loc.getBlockZ() - ((int) (length / 2)) + z + 14).getBlock();
+                            block.setType(m, true);
+                            block.setData(data[index]);
+
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     public static <T> T instance(Class<T> clazz, Object... params)
     {

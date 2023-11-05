@@ -1,5 +1,4 @@
-hub_world: ''
+hub_world: 'world' # change this to hub world
 islands:
   x: 0
   z: 0
-  schematic: ''

@@ -23,9 +23,7 @@ import me.superischroma.spectaculation.sql.*;
 import me.superischroma.spectaculation.slayer.SlayerQuest;
 import me.superischroma.spectaculation.user.AuctionSettings;
 import me.superischroma.spectaculation.user.User;
-import me.superischroma.spectaculation.util.Groups;
-import me.superischroma.spectaculation.util.SLog;
-import me.superischroma.spectaculation.util.SerialNBTTagCompound;
+import me.superischroma.spectaculation.util.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -74,6 +72,9 @@ public final class Spectaculation extends JavaPlugin
     public void onEnable()
     {
         plugin = this;
+        SLog.info("Loading islands...");
+        loadIslandWorld();
+        saveResource("private_island.schematic" , true); // copy island schematic to plugin folder
         SLog.info("Loading YAML data...");
         config = new Config("config.yml");
         heads = new Config("heads.yml");
@@ -225,6 +226,7 @@ public final class Spectaculation extends JavaPlugin
         cl.register(new MaterialDataCommand());
         cl.register(new EntitySpawnersCommand());
         cl.register(new AuctionHouseCommand());
+        cl.register(new HubCommand());
     }
 
     private void loadListeners()
@@ -284,6 +286,9 @@ public final class Spectaculation extends JavaPlugin
         new EntityPopulator(4, 4, 200, SEntityType.SOUL_OF_THE_ALPHA, RegionType.HOWLING_CAVE).start();
         new EntityPopulator(5, 15, 200, SEntityType.HOWLING_SPIRIT, RegionType.HOWLING_CAVE).start();
         new EntityPopulator(5, 15, 200, SEntityType.PACK_SPIRIT, RegionType.HOWLING_CAVE).start();
+    }
+    private void loadIslandWorld(){
+        new BlankWorldCreator("islands").createWorld();
     }
 
     private void loadSerializableClasses()

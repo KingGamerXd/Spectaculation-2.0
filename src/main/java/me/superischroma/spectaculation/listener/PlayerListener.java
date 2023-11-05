@@ -104,8 +104,10 @@ public class PlayerListener extends PListener
         Player player = e.getPlayer();
         User user = User.getUser(player.getUniqueId());
         if (!PlayerUtils.STATISTICS_CACHE.containsKey(player.getUniqueId())) PlayerUtils.STATISTICS_CACHE.put(player.getUniqueId(), PlayerUtils.getStatistics(player));
-        for (Skill skill : Skill.getSkills())
+        for (Skill skill : Skill.getSkills()) {
             skill.onSkillUpdate(user, user.getSkillXP(skill));
+        }
+        PlayerUtils.sendToIsland(player);
     }
 
     @EventHandler

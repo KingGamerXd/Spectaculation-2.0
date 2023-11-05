@@ -1,7 +1,7 @@
 package me.superischroma.spectaculation.user;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import me.superischroma.spectaculation.util.DefenseReplacement;
+import me.superischroma.spectaculation.util.*;
 import me.superischroma.spectaculation.Repeater;
 import me.superischroma.spectaculation.Spectaculation;
 import me.superischroma.spectaculation.config.Config;
@@ -19,9 +19,6 @@ import me.superischroma.spectaculation.reforge.Reforge;
 import me.superischroma.spectaculation.skill.CombatSkill;
 import me.superischroma.spectaculation.skill.Skill;
 import me.superischroma.spectaculation.slayer.SlayerQuest;
-import me.superischroma.spectaculation.util.BlankWorldCreator;
-import me.superischroma.spectaculation.util.Groups;
-import me.superischroma.spectaculation.util.SUtil;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -512,6 +509,7 @@ public final class PlayerUtils
         return false;
     }
 
+    // temp island system for now
     public static void sendToIsland(Player player)
     {
         World world = Bukkit.getWorld("islands");
@@ -525,8 +523,9 @@ public final class PlayerUtils
             double zOffset = config.getDouble("islands.z");
             if (xOffset < -25000000.0 || xOffset > 25000000.0)
                 zOffset += User.ISLAND_SIZE * 2.0;
-            File file = new File(config.getString("islands.schematic"));
-            SUtil.pasteSchematic(file, new Location(world, 7.0 + xOffset, 100.0, 7.0 + zOffset), true);
+            Location location = new Location(world, 7.0 + xOffset, 100.0, 7.0 + zOffset);
+            SUtil.generate(location,"private_island.schematic" );
+            SLog.info("Generated island!");
             SUtil.setBlocks(new Location(world, 7.0 + xOffset, 104.0, 44.0 + zOffset),
                     new Location(world, 5.0 + xOffset, 100.0, 44.0 + zOffset), Material.PORTAL, false);
             user.setIslandLocation(7.5 + xOffset, 7.5 + zOffset);
@@ -541,12 +540,16 @@ public final class PlayerUtils
             }
             config.set("islands.x", xOffset);
             config.set("islands.z", zOffset);
+            world.setGameRuleValue("keepInventory", "true");
+            world.setGameRuleValue("doMobSpawning", "false");
+            world.setGameRuleValue("fireSpread", "false");
             config.save();
         }
         // delay is to let the world load
         World finalWorld = world;
         SUtil.delay(() -> player.teleport(finalWorld.getHighestBlockAt(SUtil.blackMagic(user.getIslandX()),
                 SUtil.blackMagic(user.getIslandZ())).getLocation().add(0.5, 1.0, 0.5)), 10);
+
     }
 
     public static PotionEffect getPotionEffect(Player player, org.bukkit.potion.PotionEffectType type)
