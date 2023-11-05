@@ -1,26 +1,20 @@
 package me.superischroma.spectaculation.entity.nms;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import lib.trove.function.TObjectFunction;
 import me.superischroma.spectaculation.Spectaculation;
 import me.superischroma.spectaculation.enchantment.EnchantmentType;
 import me.superischroma.spectaculation.entity.*;
 import me.superischroma.spectaculation.item.SItem;
 import me.superischroma.spectaculation.item.SMaterial;
 import me.superischroma.spectaculation.user.User;
-import me.superischroma.spectaculation.util.SLog;
 import me.superischroma.spectaculation.util.SUtil;
 import net.minecraft.server.v1_8_R3.EntitySpider;
-import net.minecraft.server.v1_8_R3.EntityZombie;
-import net.minecraft.server.v1_8_R3.GenericAttributes;
 import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftSpider;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
