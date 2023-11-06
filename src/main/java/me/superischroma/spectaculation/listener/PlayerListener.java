@@ -29,6 +29,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
@@ -457,5 +458,15 @@ public class PlayerListener extends PListener
     {
         ItemStack getBow();
         float getForce();
+    }
+    @EventHandler
+    public void onInvFull(InventoryCloseEvent event) {
+        Player player = (Player) event.getPlayer();
+
+        if (player.getInventory().firstEmpty() == -1) {
+            player.sendMessage(ChatColor.RED + "Your Inventory is full!");
+            SUtil.sendTitle(player,ChatColor.RED + "Inventory full!");
+            player.playSound(player.getLocation(),Sound.LEVEL_UP,1.0f,1.0f);
+        }
     }
 }

@@ -18,6 +18,7 @@ import me.superischroma.spectaculation.util.SUtil;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -132,6 +133,11 @@ public class Repeater
                     int defense = SUtil.blackMagic(statistics.getDefense().addAll());
                     player.setWalkSpeed(Math.min((float) (statistics.getSpeed().addAll() / 5.0), 1.0f));
 
+                    // fix mana thing
+                    if (MANA_MAP.get(player.getUniqueId()) > manaPool ){
+                        MANA_MAP.put(player.getUniqueId() , manaPool);
+                    }
+
                     // Display Action Bar
                     float absorption = human.getAbsorptionHearts();
                     ChatColor color = absorption > 0.0f ? ChatColor.GOLD : ChatColor.RED;
@@ -152,6 +158,8 @@ public class Repeater
                     ArmorSet set = SMaterial.getIncompleteArmorSet(inventory);
                     if (set instanceof TickingSet)
                         ((TickingSet) set).tick(player, SItem.find(inventory.getHelmet()), SItem.find(inventory.getChestplate()), SItem.find(inventory.getLeggings()), SItem.find(inventory.getBoots()), Repeater.this.counters);
+
+
 
                     // Sidebar
                     Sidebar sidebar = new Sidebar("" + ChatColor.YELLOW + ChatColor.BOLD + "SKYBLOCK", "SKYBLOCK");

@@ -26,6 +26,11 @@ public class AspectOfTheDragons implements ToolStatistics, MaterialFunction, Abi
     }
 
     @Override
+    public double getBaseIntelligence() {
+        return 1000;
+    }
+
+    @Override
     public String getDisplayName()
     {
         return "Aspect of the Dragons";

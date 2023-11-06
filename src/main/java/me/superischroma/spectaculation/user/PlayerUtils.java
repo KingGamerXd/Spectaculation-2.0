@@ -65,19 +65,27 @@ public final class PlayerUtils
 
     public static PlayerStatistics updateHandStatistics(SItem hand, PlayerStatistics statistics)
     {
-        DoublePlayerStatistic strength = statistics.getStrength(),
-                intelligence = statistics.getIntelligence();
-        DoublePlayerStatistic critChance = statistics.getCritChance(), critDamage = statistics.getCritDamage();
-        if (hand != null && hand.getType().getStatistics().getType() != GenericItemType.ARMOR)
-        {
+        DoublePlayerStatistic strength = statistics.getStrength();
+        DoublePlayerStatistic intelligence = statistics.getIntelligence();
+        DoublePlayerStatistic critChance = statistics.getCritChance();
+        DoublePlayerStatistic critDamage = statistics.getCritDamage();
+        statistics.zeroAll(PlayerStatistic.HAND);
+
+        if (hand != null && hand.getType().getStatistics().getType() != GenericItemType.ARMOR && hand.getType().getStatistics().getType() != GenericItemType.ACCESSORY) {
             Reforge reforge = hand.getReforge() == null ? Reforge.blank() : hand.getReforge();
             strength.set(PlayerStatistic.HAND, reforge.getStrength().getForRarity(hand.getRarity()));
             critDamage.set(PlayerStatistic.HAND, reforge.getCritDamage().getForRarity(hand.getRarity()));
             critChance.set(PlayerStatistic.HAND, reforge.getCritChance().getForRarity(hand.getRarity()));
             intelligence.set(PlayerStatistic.HAND, reforge.getIntelligence().getForRarity(hand.getRarity()));
             PlayerBoostStatistics handStatistics = hand.getType().getBoostStatistics();
-            if (handStatistics != null)
+            if (handStatistics != null) {
+
                 strength.add(PlayerStatistic.HAND, handStatistics.getBaseStrength());
+                critDamage.add(PlayerStatistic.HAND, handStatistics.getBaseCritDamage());
+                critChance.add(PlayerStatistic.HAND, handStatistics.getBaseCritChance());
+                intelligence.add(PlayerStatistic.HAND, handStatistics.getBaseIntelligence());
+
+            }
         }
         else
         {
@@ -509,9 +517,10 @@ public final class PlayerUtils
         return false;
     }
 
-    // temp island system for now
+    // todo : code new island system
     public static void sendToIsland(Player player)
     {
+        long start = System.currentTimeMillis();
         World world = Bukkit.getWorld("islands");
         if (world == null)
             world = new BlankWorldCreator("islands").createWorld();
@@ -525,7 +534,6 @@ public final class PlayerUtils
                 zOffset += User.ISLAND_SIZE * 2.0;
             Location location = new Location(world, 7.0 + xOffset, 100.0, 7.0 + zOffset);
             SUtil.generate(location,"private_island.schematic" );
-            SLog.info("Generated island!");
             SUtil.setBlocks(new Location(world, 7.0 + xOffset, 104.0, 44.0 + zOffset),
                     new Location(world, 5.0 + xOffset, 100.0, 44.0 + zOffset), Material.PORTAL, false);
             user.setIslandLocation(7.5 + xOffset, 7.5 + zOffset);
@@ -544,8 +552,11 @@ public final class PlayerUtils
             world.setGameRuleValue("doMobSpawning", "false");
             world.setGameRuleValue("fireSpread", "false");
             config.save();
+            long end = System.currentTimeMillis() - start;
+            player.sendMessage(ChatColor.AQUA + "[SkyBlock] :" + ChatColor.RESET + " Generated island! This took "  + ChatColor.YELLOW + end + "ms");
         }
-        // delay is to let the world load
+
+
         World finalWorld = world;
         SUtil.delay(() -> player.teleport(finalWorld.getHighestBlockAt(SUtil.blackMagic(user.getIslandX()),
                 SUtil.blackMagic(user.getIslandZ())).getLocation().add(0.5, 1.0, 0.5)), 10);

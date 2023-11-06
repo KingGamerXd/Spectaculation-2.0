@@ -1,5 +1,5 @@
 name: Spectaculation
-version: ${project.version}
+version: 1.1
 main: me.superischroma.spectaculation.Spectaculation
 authors: [ super ]
 description: ridiculousness

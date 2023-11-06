@@ -71,9 +71,10 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>bukkit-repo</id>
-            <url>http://repo.bukkit.org/content/groups/public/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
+
         <repository>
             <id>everything</id>
             <url>https://repo.citizensnpcs.co/</url>
@@ -102,6 +103,5 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.40.1.0</version>
         </dependency>
-
     </dependencies>
 </project>

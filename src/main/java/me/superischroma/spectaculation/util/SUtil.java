@@ -592,7 +592,7 @@ public class SUtil
 
                             Block block = new Location(loc.getWorld(),
                                     loc.getBlockX() - ((int) (width / 2)) + x,
-                                    loc.getBlockY()  + y,
+                                    loc.getBlockY()  + y - 19,
                                     loc.getBlockZ() - ((int) (length / 2)) + z + 14).getBlock();
                             block.setType(m, true);
                             block.setData(data[index]);
