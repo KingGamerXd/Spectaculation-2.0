@@ -3,6 +3,8 @@ package me.superischroma.spectaculation.auction;
 import lombok.Getter;
 import me.superischroma.spectaculation.Spectaculation;
 import me.superischroma.spectaculation.config.Config;
+import me.superischroma.spectaculation.item.GenericItemType;
+import me.superischroma.spectaculation.item.ItemCategory;
 import me.superischroma.spectaculation.item.SItem;
 import me.superischroma.spectaculation.user.AuctionSettings;
 import me.superischroma.spectaculation.user.User;
@@ -39,6 +41,10 @@ public class AuctionItem
     @Getter
     private long end;
     private UUID owner;
+
+    Map<ItemCategory, GenericItemType> categoryToTypeMap;
+
+
     @Getter
     private List<UUID> participants;
     @Getter
@@ -54,6 +60,7 @@ public class AuctionItem
         this.owner = owner;
         this.participants = participants;
         this.bin = bin;
+        this.categoryToTypeMap = new HashMap<>();
         if (!AUCTION_ITEM_FOLDER.exists()) AUCTION_ITEM_FOLDER.mkdirs();
         String path = uuid.toString() + ".yml";
         File configFile = new File(AUCTION_ITEM_FOLDER, path);
@@ -362,7 +369,36 @@ public class AuctionItem
             Stream<AuctionItem> items = getAuctions().stream();
             items = items.filter((item) -> !item.isExpired());
             // filter for category
-            items = items.filter((item) -> item.getItem().getType().getStatistics().getCategory() == settings.getCategory());
+
+            // todo : code a better filter
+            items = items.filter(item -> {
+                GenericItemType itemType = item.getItem().getType().getStatistics().getType();
+                switch (settings.getCategory()) {
+                    case WEAPONS:
+                        return itemType == GenericItemType.WEAPON || itemType == GenericItemType.RANGED_WEAPON;
+                    case ARMOR:
+                        return itemType == GenericItemType.ARMOR;
+                    case ACCESSORIES:
+                        return itemType == GenericItemType.ACCESSORY;
+                    case BLOCKS:
+                        return itemType == GenericItemType.BLOCK;
+
+                    case CONSUMABLES:
+                        return itemType == GenericItemType.ITEM;
+
+                    case TOOLS_MISC:
+                        return itemType != GenericItemType.WEAPON
+                                && itemType != GenericItemType.ACCESSORY
+                                && itemType != GenericItemType.RANGED_WEAPON
+                                && itemType != GenericItemType.BLOCK
+                                && itemType != GenericItemType.ARMOR;
+                    default:
+                        return false;
+                }
+            });
+
+
+
             // filter for query
             if (settings.getQuery() != null)
             {

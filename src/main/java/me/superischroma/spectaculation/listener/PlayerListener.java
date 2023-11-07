@@ -25,6 +25,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftHumanEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -468,5 +469,11 @@ public class PlayerListener extends PListener
             SUtil.sendTitle(player,ChatColor.RED + "Inventory full!");
             player.playSound(player.getLocation(),Sound.LEVEL_UP,1.0f,1.0f);
         }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event){
+        User user = User.getUser(event.getPlayer().getUniqueId());
+        event.setCancelled(!user.isOnIsland()); // set event cancel if player is not on private island
     }
 }
