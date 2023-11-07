@@ -227,6 +227,7 @@ public final class Spectaculation extends JavaPlugin
         cl.register(new EntitySpawnersCommand());
         cl.register(new AuctionHouseCommand());
         cl.register(new HubCommand());
+        cl.register(new VisitCommand());
     }
 
     private void loadListeners()

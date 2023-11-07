@@ -1,5 +1,10 @@
 package me.superischroma.spectaculation.command;
 
+import me.superischroma.spectaculation.gui.GUIType;
+import me.superischroma.spectaculation.gui.VisitGUI;
+import me.superischroma.spectaculation.user.PlayerUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;

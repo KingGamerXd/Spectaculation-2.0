@@ -563,6 +563,30 @@ public final class PlayerUtils
 
     }
 
+
+    public static Config getUserData(UUID uuid){
+        String path = uuid.toString() + ".yml";
+        File userFolder = new File(Spectaculation.getPlugin().getDataFolder(), "./users");
+        File configFile = new File(userFolder, path);
+        if (configFile.exists()){
+            return new Config(userFolder , path );
+        }
+
+        return null;
+    }
+
+    public static Location getIslandLocation(UUID uuid){
+        if (getUserData(uuid) == null) return null;
+        Config data = getUserData(uuid);
+        double x = data.contains("island.x") ? data.getDouble("island.x") : null;
+        double z =  data.contains("island.z") ? data.getDouble("island.z") : null;
+        World islandWorld = Bukkit.getWorld("islands");
+        return islandWorld.getHighestBlockAt(SUtil.blackMagic(x),
+                SUtil.blackMagic(z)).getLocation().add(0.5, 1.0, 0.5);
+    }
+
+
+
     public static PotionEffect getPotionEffect(Player player, org.bukkit.potion.PotionEffectType type)
     {
         for (PotionEffect effect : player.getActivePotionEffects())
