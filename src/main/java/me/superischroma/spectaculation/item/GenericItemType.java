@@ -9,5 +9,6 @@ public enum GenericItemType
     ACCESSORY,
     BLOCK,
     ITEM,
-    PET
+    PET,
+    ENCHANTMENT
 }

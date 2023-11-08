@@ -6,6 +6,7 @@ import me.superischroma.spectaculation.item.Rarity;
 import me.superischroma.spectaculation.user.AuctionSettings;
 import me.superischroma.spectaculation.user.User;
 import me.superischroma.spectaculation.util.PaginationList;
+import me.superischroma.spectaculation.util.SLog;
 import me.superischroma.spectaculation.util.SUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -58,6 +59,7 @@ public class AuctionsBrowserGUI extends GUI
             player.sendMessage(ChatColor.RED + "Something went wrong while talking to the Auction House service!");
             return;
         }
+        SLog.info("Amount of auctions : " + result.size());
         String browsing = ChatColor.GREEN + "Currently browsing!";
         String view = ChatColor.YELLOW + "Click to view items!";
         List<AuctionItem> items = result.getPage(page);
@@ -340,6 +342,7 @@ public class AuctionsBrowserGUI extends GUI
             public GUI onQueryFinish(String query)
             {
                 settings.setQuery(query);
+
                 return new AuctionsBrowserGUI();
             }
 

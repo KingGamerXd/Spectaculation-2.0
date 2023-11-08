@@ -8,6 +8,7 @@ import me.superischroma.spectaculation.item.ItemCategory;
 import me.superischroma.spectaculation.item.SItem;
 import me.superischroma.spectaculation.user.AuctionSettings;
 import me.superischroma.spectaculation.user.User;
+import me.superischroma.spectaculation.util.SLog;
 import me.superischroma.spectaculation.util.SUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -384,7 +385,7 @@ public class AuctionItem
                         return itemType == GenericItemType.BLOCK;
 
                     case CONSUMABLES:
-                        return itemType == GenericItemType.ITEM;
+                        return itemType == GenericItemType.ENCHANTMENT;
 
                     case TOOLS_MISC:
                         return itemType != GenericItemType.WEAPON
@@ -407,7 +408,7 @@ public class AuctionItem
                     String query = settings.getQuery().toLowerCase();
                     String name = item.getItem().getType().getDisplayName(item.getItem().getType().getData()).toLowerCase();
                     String lore = item.getItem().getLore().asBukkitLore().toString().toLowerCase();
-                    return query.contains(name) || query.contains(lore) || query.contains(item.getItem().getType().name().toLowerCase());
+                    return name.contains(query) || lore.contains(query) || item.getItem().getType().name().toLowerCase().contains(query);
                 });
             }
             // sort

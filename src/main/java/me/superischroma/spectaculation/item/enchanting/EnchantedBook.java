@@ -28,7 +28,7 @@ public class EnchantedBook implements MaterialStatistics, MaterialFunction, Ench
     @Override
     public GenericItemType getType()
     {
-        return GenericItemType.ITEM;
+        return GenericItemType.ENCHANTMENT;
     }
 
     @Override

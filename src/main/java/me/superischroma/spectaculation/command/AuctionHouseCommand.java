@@ -2,6 +2,7 @@ package me.superischroma.spectaculation.command;
 
 import me.superischroma.spectaculation.auction.AuctionItem;
 import me.superischroma.spectaculation.gui.AuctionViewGUI;
+import me.superischroma.spectaculation.gui.GUIType;
 import me.superischroma.spectaculation.user.User;
 import me.superischroma.spectaculation.util.SUtil;
 import org.bukkit.ChatColor;
@@ -16,7 +17,9 @@ public class AuctionHouseCommand extends SCommand
     @Override
     public void run(CommandSource sender, String[] args)
     {
-        if (args.length != 1) throw new CommandArgumentException();
+        if (args.length != 1) {
+            GUIType.AUCTION_HOUSE.getGUI().open(sender.getPlayer());
+        }
         if (sender instanceof ConsoleCommandSender) throw new CommandFailException("Console senders cannot use this command!");
         try
         {
