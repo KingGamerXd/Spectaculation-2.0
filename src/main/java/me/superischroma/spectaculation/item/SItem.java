@@ -26,7 +26,7 @@ import java.util.*;
 @Getter
 public class SItem implements Cloneable, ConfigurationSerializable
 {
-    private static final List<String> GLOBAL_NBT_TAGS = Arrays.asList("type", "rarity", "origin", "recombobulated");
+    private static final List<String> GLOBAL_NBT_TAGS = Arrays.asList("ExtraAttributes",  "type", "rarity", "origin", "recombobulated");
     private static final List<String> GLOBAL_DATA_KEYS = Arrays.asList("type", "variant", "stack", "rarity", "origin", "recombobulated");
 
     private final SMaterial type;
@@ -410,6 +410,7 @@ public class SItem implements Cloneable, ConfigurationSerializable
         if (nmsStack == null)
             return;
         NBTTagCompound compound = nmsStack.getTag() != null ? nmsStack.getTag() : new NBTTagCompound();
+        compound.remove("ExtraAttributes");
         compound.remove("type");
         compound.remove("variant");
         compound.remove("enchantments");
@@ -427,6 +428,9 @@ public class SItem implements Cloneable, ConfigurationSerializable
                 compound.set(key, data.get(key));
         }
         compound.remove("amount");
+        NBTTagCompound  extraAttributesTag = new NBTTagCompound();
+        extraAttributesTag.setString("id", type.name());
+        compound.set("ExtraAttributes", extraAttributesTag);
         compound.setString("type", type.name());
         if (variant != 0)
             compound.setShort("variant", variant);
@@ -555,6 +559,9 @@ public class SItem implements Cloneable, ConfigurationSerializable
             compound.remove(key);
             compound.set(key, data.get(key));
         }
+        NBTTagCompound  extraAttributesTag = new NBTTagCompound();
+        extraAttributesTag.setString("id", type.name());
+        compound.set("ExtraAttributes", extraAttributesTag);
         compound.setString("type", type.name());
         if (variant != 0)
             compound.setShort("variant", variant);

@@ -1,5 +1,6 @@
 package me.superischroma.spectaculation;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.superischroma.spectaculation.auction.AuctionBid;
 import me.superischroma.spectaculation.auction.AuctionEscrow;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -43,11 +45,9 @@ import java.util.Map;
 
 public final class Spectaculation extends JavaPlugin
 {
+    @Getter
     private static Spectaculation plugin;
-    public static Spectaculation getPlugin()
-    {
-        return plugin;
-    }
+
 
     public Config config;
     public Config heads;
@@ -103,8 +103,8 @@ public final class Spectaculation extends JavaPlugin
         loadCommands();
         SLog.info("Loading listeners...");
         loadListeners();
-        SLog.info("Registering Citizens traits...");
-        registerTraits();
+        SLog.info("Registering NPCs...");
+        registerNPCS();
         SLog.info("Starting entity spawners...");
         EntitySpawner.startSpawnerTask();
         SLog.info("Establishing player regions...");
@@ -240,8 +240,10 @@ public final class Spectaculation extends JavaPlugin
         new WorldListener();
     }
 
-    private void registerTraits()
+    private void registerNPCS()
     {
+
+        // todo
     }
 
     private void startPopulators()

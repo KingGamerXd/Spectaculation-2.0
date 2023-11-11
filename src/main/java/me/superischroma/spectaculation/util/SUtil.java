@@ -1155,4 +1155,13 @@ public class SUtil
         }
         return dur;
     }
+    public static void sendPacket(Packet<?> packet, Player player){
+        ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    public static void sendPacket(Packet<?> packet){
+        for(Player player : Bukkit.getOnlinePlayers()){
+            sendPacket(packet , player);
+        }
+    }
 }

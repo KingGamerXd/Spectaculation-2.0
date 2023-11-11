@@ -29,8 +29,7 @@ public enum GUIType
     CREATE_AUCTION(CreateAuctionGUI.class),
     AUCTION_CONFIRM(AuctionConfirmGUI.class),
     MANAGE_AUCTIONS(ManageAuctionsGUI.class),
-    YOUR_BIDS(YourBidsGUI.class),
-    Visit_Island(VisitGUI.class);
+    YOUR_BIDS(YourBidsGUI.class);
 
     private final Class<? extends GUI> gui;
 
