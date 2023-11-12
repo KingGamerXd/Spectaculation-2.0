@@ -534,8 +534,8 @@ public final class PlayerUtils
                 zOffset += User.ISLAND_SIZE * 2.0;
             Location location = new Location(world, 7.0 + xOffset, 100.0, 7.0 + zOffset);
             SUtil.generate(location,"private_island.schematic" );
-            SUtil.setBlocks(new Location(world, 7.0 + xOffset, 104.0, 44.0 + zOffset),
-                    new Location(world, 5.0 + xOffset, 100.0, 44.0 + zOffset), Material.PORTAL, false);
+            SUtil.setBlocks(new Location(world, 7.0 + xOffset, 104.0, 43.0 + zOffset),
+                    new Location(world, 5.0 + xOffset, 100.0, 42.0 + zOffset), Material.PORTAL, false);
             user.setIslandLocation(7.5 + xOffset, 7.5 + zOffset);
             user.save();
             if (xOffset > 0)
@@ -548,9 +548,6 @@ public final class PlayerUtils
             }
             config.set("islands.x", xOffset);
             config.set("islands.z", zOffset);
-            world.setGameRuleValue("keepInventory", "true");
-            world.setGameRuleValue("doMobSpawning", "false");
-            world.setGameRuleValue("fireSpread", "false");
             config.save();
             long end = System.currentTimeMillis() - start;
             player.sendMessage(ChatColor.AQUA + "[SkyBlock] :" + ChatColor.RESET + " Generated island! This took "  + ChatColor.YELLOW + end + "ms");
