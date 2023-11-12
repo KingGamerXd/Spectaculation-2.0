@@ -109,7 +109,7 @@ public class PlayerListener extends PListener
         for (Skill skill : Skill.getSkills()) {
             skill.onSkillUpdate(user, user.getSkillXP(skill));
         }
-        PlayerUtils.sendToIsland(player);
+        //PlayerUtils.sendToIsland(player);
     }
 
     @EventHandler

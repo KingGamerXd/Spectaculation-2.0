@@ -55,6 +55,11 @@ public final class Spectaculation extends JavaPlugin
     public Config spawners;
     public CommandMap commandMap;
     public SQLDatabase sql;
+
+    @Getter
+    public String ip;
+    @Getter
+    public String serverName;
     public SQLRegionData regionData;
     public SQLWorldData worldData;
     public CommandLoader cl;
@@ -163,6 +168,8 @@ public final class Spectaculation extends JavaPlugin
                     specShapeless.add(SMaterial.getSpecEquivalent(stack.getType(), stack.getDurability()), stack.getAmount());
             }
         }
+        this.ip = (config.getString("ip") != null) ? config.getString("ip") : "mc.hypixel.net";
+        this.serverName = (config.getString("name") != null) ? config.getString("name") : "SKYBLOCK";
         SLog.info("Enabled " + this.getDescription().getFullName());
     }
 

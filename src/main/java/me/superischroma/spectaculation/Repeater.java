@@ -162,7 +162,7 @@ public class Repeater
 
 
                     // Sidebar
-                    Sidebar sidebar = new Sidebar("" + ChatColor.YELLOW + ChatColor.BOLD + "SKYBLOCK", "SKYBLOCK");
+                    Sidebar sidebar = new Sidebar("" + ChatColor.YELLOW + ChatColor.BOLD + Spectaculation.getPlugin().serverName, "SKYBLOCK");
                     sidebar.add(ChatColor.GRAY + SUtil.getDate());
                     sidebar.add("  ");
                     sidebar.add(" " + SkyBlockCalendar.getMonthName() + " " + SUtil.ntify(SkyBlockCalendar.getDay()));
@@ -237,7 +237,7 @@ public class Repeater
                         }
                         sidebar.add("     ");
                     }
-                    sidebar.add(ChatColor.YELLOW + "recreation");
+                    sidebar.add(ChatColor.YELLOW + Spectaculation.getPlugin().getIp());
                     sidebar.apply(player);
                 }
                 counters[0]++;
