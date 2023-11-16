@@ -235,6 +235,11 @@ public final class Spectaculation extends JavaPlugin
         cl.register(new AuctionHouseCommand());
         cl.register(new HubCommand());
         cl.register(new VisitCommand());
+        cl.register(new AnvilCommand());
+        cl.register(new BankerCommand());
+        cl.register(new ReforgeCommand());
+
+        // todo : use reflection to register command and listener automatically
     }
 
     private void loadListeners()
