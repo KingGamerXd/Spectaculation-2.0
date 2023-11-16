@@ -474,6 +474,6 @@ public class PlayerListener extends PListener
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event){
         User user = User.getUser(event.getPlayer().getUniqueId());
-        event.setCancelled(!user.isOnIsland()); // set event cancel if player is not on private island
+        event.setCancelled(!user.isOnIsland() || !event.getPlayer().isOp()); //  if player is not on private island
     }
 }
