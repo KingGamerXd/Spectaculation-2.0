@@ -25,7 +25,11 @@ A fork of the Spectaculation Hypixel SkyBlock plugin, originally coded by Super,
 - pets
 - Economy
 - Mining
+
+## Coming soon
 - Merchants
+- NPCS
+- Bazaar
 
 
 ## Commands :
