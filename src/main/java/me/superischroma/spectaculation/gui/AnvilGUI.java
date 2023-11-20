@@ -10,12 +10,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class AnvilGUI extends GUI implements BlockBasedGUI
 {
@@ -25,10 +30,12 @@ public class AnvilGUI extends GUI implements BlockBasedGUI
             ChatColor.GRAY + "Combine the items in the slots",
             ChatColor.GRAY + "to the left and right below.");
     private static final String CANNOT_COMBINE = ChatColor.RED + "These items cannot be combined!";
+    private boolean applied;
 
     public AnvilGUI()
     {
         super("Anvil", 54);
+        this.applied = false;
         this.fill(BLACK_STAINED_GLASS_PANE);
         this.fill(SUtil.createColoredStainedGlassPane((short) 14, ""), 45, 53);
         this.set(GUIClickableItem.getCloseItem(49));
@@ -91,6 +98,7 @@ public class AnvilGUI extends GUI implements BlockBasedGUI
         });
         this.set(new GUIClickableItem()
         {
+
             @Override
             public void run(InventoryClickEvent e)
             {
@@ -127,6 +135,7 @@ public class AnvilGUI extends GUI implements BlockBasedGUI
                     }
                 }
                 inventory.setItem(22, DEFAULT_COMBINE_ITEMS);
+                applied = true;
                 setItemTo(true, false, inventory);
                 setItemTo(false, false, inventory);
                 inventory.setItem(29, null);
@@ -155,6 +164,15 @@ public class AnvilGUI extends GUI implements BlockBasedGUI
         {
             public void run()
             {
+                ItemStack toUpgrade = inventory.getItem(29);
+                ItemStack sacrifice = inventory.getItem(33);
+                ItemStack upgrade = inventory.getItem(13);
+                if (toUpgrade == null && sacrifice == null && upgrade.getType() == Material.BARRIER && applied)
+                    applied = false;
+                if ((toUpgrade != null || sacrifice != null) && applied) {
+                    inventory.getViewers().get(0).getInventory().addItem(upgrade);
+                    applied = false;
+                }
                 ItemStack select = inventory.getItem(13);
                 if (select != null)
                 {
@@ -229,6 +247,23 @@ public class AnvilGUI extends GUI implements BlockBasedGUI
     {
         return Material.ANVIL;
     }
+
+    @Override
+    public void onClose(InventoryCloseEvent e) {
+       Inventory inventory = e.getInventory();
+       Player player = (Player) e.getPlayer();
+       PlayerInventory playerInventory = player.getInventory();
+       ItemStack toUpgrade = inventory.getItem(29);
+       ItemStack sacrifice = inventory.getItem(33);
+       ItemStack upgrade = inventory.getItem(13);
+       if (toUpgrade != null)
+           playerInventory.addItem(toUpgrade);
+       if (sacrifice != null)
+           playerInventory.addItem(sacrifice);
+       if (upgrade.getType() != Material.BARRIER && toUpgrade == null && sacrifice == null)
+           playerInventory.addItem(upgrade);
+    }
+
 
     private static void setItemTo(boolean upgrade, boolean green, Inventory inventory)
     {

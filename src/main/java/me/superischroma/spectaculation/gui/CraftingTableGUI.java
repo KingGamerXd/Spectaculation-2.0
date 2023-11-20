@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -177,6 +178,18 @@ public class CraftingTableGUI extends GUI implements BlockBasedGUI
         for (int i = 0; i < CRAFT_SLOTS.length; i++)
             stacks[i] = inventory.getItem(CRAFT_SLOTS[i]);
         return stacks;
+    }
+
+    @Override
+    public void onClose(InventoryCloseEvent e) {
+        for (int slot : CRAFT_SLOTS){
+            ItemStack stack = e.getInventory().getItem(slot);
+            if (stack == null) continue;
+            if (e.getPlayer().getInventory().firstEmpty() != -1)
+                e.getPlayer().getInventory().addItem(stack);
+            else
+                e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), stack);
+        }
     }
 
     private static int indexOf(Recipe<?> recipe, List<MaterialQuantifiable> ingredients, MaterialQuantifiable search)
