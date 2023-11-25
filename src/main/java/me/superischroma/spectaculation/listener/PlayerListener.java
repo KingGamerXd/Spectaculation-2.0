@@ -6,6 +6,7 @@ import me.superischroma.spectaculation.enchantment.Enchantment;
 import me.superischroma.spectaculation.enchantment.EnchantmentType;
 import me.superischroma.spectaculation.entity.SEntity;
 import me.superischroma.spectaculation.entity.SEntityType;
+import me.superischroma.spectaculation.event.PlayerClickNPCEvent;
 import me.superischroma.spectaculation.item.SBlock;
 import me.superischroma.spectaculation.item.SItem;
 import me.superischroma.spectaculation.item.SMaterial;
@@ -520,4 +521,8 @@ public class PlayerListener extends PListener
                 }
             }
         }
+     @EventHandler
+    public void onInteract(PlayerClickNPCEvent event){
+        event.getPlayer().sendMessage("Clicked " + event.getNPC().getName());
+     }
 }

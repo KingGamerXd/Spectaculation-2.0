@@ -3,10 +3,12 @@ package me.superischroma.spectaculation.packet;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
+import me.superischroma.spectaculation.event.PlayerClickNPCEvent;
 import me.superischroma.spectaculation.npc.SkyblockNPC;
 import me.superischroma.spectaculation.npc.SkyblockNPCManager;
 import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -43,22 +45,25 @@ public class PacketReader {
 
     }
 
-    public void readPacket(Packet<?> packet, Player p)
-    {
-        if(packet.getClass().getSimpleName().equalsIgnoreCase("PacketPlayInUseEntity"))
-        {
+    public void readPacket(Packet<?> packet, Player p) {
+        if (packet.getClass().getSimpleName().equalsIgnoreCase("PacketPlayInUseEntity")) {
             PacketPlayInUseEntity pack = (PacketPlayInUseEntity) packet;
             int id = (int) getValue(packet, "a");
-            if(getValue(packet, "action").toString().equalsIgnoreCase("interact"))
-            {
-               for (SkyblockNPC npc : SkyblockNPCManager.getNPCS()){
-                   if (npc.getEntityID() == id)
-                       npc.getParameters().onInteract(player , npc);
-
-               }
+            if (getValue(packet, "action").toString().equalsIgnoreCase("interact")) {
+                for (SkyblockNPC npc : SkyblockNPCManager.getNPCS()) {
+                    if (npc.getEntityID() == id) {
+                        PlayerClickNPCEvent event = new PlayerClickNPCEvent(p, npc);
+                        Bukkit.getServer().getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            return;
+                        }
+                        npc.getParameters().onInteract(p, npc);
+                    }
+                }
             }
         }
     }
+
 
     private Object getValue(Object instance, String name)
     {
