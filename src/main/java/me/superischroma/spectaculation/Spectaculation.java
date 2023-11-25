@@ -18,6 +18,8 @@ import me.superischroma.spectaculation.listener.BlockListener;
 import me.superischroma.spectaculation.listener.PlayerListener;
 import me.superischroma.spectaculation.listener.ServerPingListener;
 import me.superischroma.spectaculation.listener.WorldListener;
+import me.superischroma.spectaculation.npc.SkyblockNPC;
+import me.superischroma.spectaculation.npc.SkyblockNPCManager;
 import me.superischroma.spectaculation.region.Region;
 import me.superischroma.spectaculation.region.RegionType;
 import me.superischroma.spectaculation.sql.*;
@@ -38,6 +40,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
@@ -254,8 +257,17 @@ public final class Spectaculation extends JavaPlugin
 
     private void registerNPCS()
     {
+        Reflections reflections = new Reflections("me.superischroma.spectaculation.npc");
+        for (Class<? extends SkyblockNPC> npcClazz : reflections.getSubTypesOf(SkyblockNPC.class)){
+            try {
+                npcClazz.getDeclaredConstructor().newInstance();
+            }catch (Exception ex){
+                ex.printStackTrace();
 
-        // todo
+            }
+        }
+        SLog.info("Loaded " + SkyblockNPCManager.getNPCS().size() + " npcs");
+
     }
 
     private void startPopulators()

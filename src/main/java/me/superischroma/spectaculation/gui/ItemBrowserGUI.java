@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -129,6 +130,14 @@ public class ItemBrowserGUI extends GUI
                 }
             });
         }
+    }
+    public boolean isCustomItem(ItemStack itemStack) {
+        if (itemStack == null) {
+            return false;
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        return itemMeta != null && (itemMeta.hasDisplayName() || itemMeta.hasLore());
     }
 
     public ItemBrowserGUI(String query)

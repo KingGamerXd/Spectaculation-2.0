@@ -13,6 +13,9 @@ import me.superischroma.spectaculation.item.accessory.AccessoryFunction;
 import me.superischroma.spectaculation.item.bow.BowFunction;
 import me.superischroma.spectaculation.item.pet.Pet;
 import me.superischroma.spectaculation.item.pet.PetAbility;
+import me.superischroma.spectaculation.npc.SkyblockNPC;
+import me.superischroma.spectaculation.npc.SkyblockNPCManager;
+import me.superischroma.spectaculation.packet.PacketReader;
 import me.superischroma.spectaculation.potion.PotionEffect;
 import me.superischroma.spectaculation.skill.Skill;
 import me.superischroma.spectaculation.user.PlayerStatistics;
@@ -109,7 +112,7 @@ public class PlayerListener extends PListener
         for (Skill skill : Skill.getSkills()) {
             skill.onSkillUpdate(user, user.getSkillXP(skill));
         }
-        //PlayerUtils.sendToIsland(player);
+       new PacketReader().injectPlayer(player);
     }
 
     @EventHandler
@@ -476,4 +479,45 @@ public class PlayerListener extends PListener
         User user = User.getUser(event.getPlayer().getUniqueId());
         event.setCancelled(!user.isOnIsland() || !event.getPlayer().isOp()); //  if player is not on private island
     }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event){
+        Player player = event.getPlayer();
+        for (SkyblockNPC skyblockNPC : SkyblockNPCManager.getNPCS()){
+            if (skyblockNPC.isShown(player))
+                skyblockNPC.hideFrom(player);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        Player player = event.getPlayer();
+        World toWorld = event.getTo().getWorld();
+        World fromWorld = event.getFrom().getWorld();
+        if (!toWorld.equals(fromWorld)) {
+            for (SkyblockNPC npc : SkyblockNPCManager.getNPCS()) {
+                if (npc.getWorld().equals(toWorld)) {
+                    SUtil.delay(() -> npc.showTo(player) , 20);  // delay to let world load properly
+                } else if (npc.isShown(player) && npc.getWorld().equals(fromWorld)) {
+                    npc.hideFrom(player);
+                }
+            }
+        }
+    }
+
+
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {   // handle auto hide and show
+        Player player = event.getPlayer();
+        Location from = event.getFrom();
+        Location to = event.getTo();
+            for (SkyblockNPC skyblockNPC : SkyblockNPCManager.getNPCS()) {
+                if (!skyblockNPC.getWorld().equals(player.getWorld())) continue;
+                if (!skyblockNPC.isShown(player) && skyblockNPC.isPlayerNearby(player)) {
+                    skyblockNPC.showTo(player);
+                } else if (skyblockNPC.isShown(player) && !skyblockNPC.isPlayerNearby(player)) {
+                    skyblockNPC.hideFrom(player);
+                }
+            }
+        }
 }
