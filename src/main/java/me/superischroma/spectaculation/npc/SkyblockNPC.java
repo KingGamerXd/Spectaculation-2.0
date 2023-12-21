@@ -5,6 +5,7 @@ import com.mojang.authlib.properties.Property;
 import lombok.Getter;
 import me.superischroma.spectaculation.Spectaculation;
 import me.superischroma.spectaculation.util.SLog;
+import me.superischroma.spectaculation.util.SUtil;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -160,11 +161,22 @@ public class SkyblockNPC {
     }
 
     public boolean isPlayerNearby(Player player) {
+        if (player == null) return false;
         Location npcLocation = getLocation();
         Location playerLocation = player.getLocation();
+
+        if (!playerLocation.getWorld().equals(npcLocation.getWorld())) {
+            return false;
+        }
+        double hideDistance = 25;
+        double bukkitRange = Bukkit.getViewDistance() << 4;
         double distanceSquared = npcLocation.distanceSquared(playerLocation);
-        return distanceSquared <= 35.0;
+
+        return distanceSquared <= SUtil.square(hideDistance) && distanceSquared <= SUtil.square(bukkitRange);
     }
+
+
+
     public boolean isShown(Player player){
         return viewers.contains(player.getUniqueId());
     }

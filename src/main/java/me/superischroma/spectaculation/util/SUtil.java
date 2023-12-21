@@ -7,6 +7,7 @@ import me.superischroma.spectaculation.config.Config;
 import me.superischroma.spectaculation.enchantment.Enchantment;
 import me.superischroma.spectaculation.gui.GUI;
 import me.superischroma.spectaculation.item.*;
+import me.superischroma.spectaculation.merchant.MerchantItemHandler;
 import me.superischroma.spectaculation.potion.PotionColor;
 import me.superischroma.spectaculation.potion.PotionEffect;
 import net.minecraft.server.v1_8_R3.*;
@@ -384,6 +385,14 @@ public class SUtil
         item.getStack().setAmount(amount);
         return item;
     }
+    public static SItem toShopItem(SMaterial smaterial , int amount , Long price , Long value){
+        SItem item = SItem.of(smaterial);
+        item.getStack().setAmount(amount);
+        item.setPrice(price);
+        item.setItemValue(value);
+        MerchantItemHandler.ITEMS.put(smaterial , item);
+        return item;
+    }
 
     public static double roundTo(double d, int decimalPlaces)
     {
@@ -405,6 +414,10 @@ public class SUtil
         GameMode gameMode = player.getGameMode();
         if (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR) return;
         player.setAllowFlight(flight);
+    }
+
+    public static double square(double value) {
+        return value * value;
     }
 
     // not my code

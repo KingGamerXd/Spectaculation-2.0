@@ -52,7 +52,8 @@ public class ShopTradingOptionsGUI extends GUI
         List<String> lore = meta.getLore();
         lore.add(" ");
         lore.add(ChatColor.GRAY + "Cost");
-        long price = item.getType().getStatistics().getPrice() * amount;
+        if (item.getPrice() == null) return null;
+        long price = item.getPrice() * amount;
         lore.add(ChatColor.GOLD + SUtil.commaify(price) + " Coin" + (price != 1 ? "s" : ""));
         lore.add(" ");
         lore.add(ChatColor.YELLOW + "Click to purchase!");

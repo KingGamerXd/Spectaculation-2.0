@@ -1,5 +1,6 @@
 package me.superischroma.spectaculation.gui;
 
+import me.superischroma.spectaculation.merchant.FarmMerchantGUI;
 import me.superischroma.spectaculation.util.SUtil;
 
 public enum GUIType

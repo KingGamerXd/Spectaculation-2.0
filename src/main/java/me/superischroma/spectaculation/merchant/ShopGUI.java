@@ -1,10 +1,13 @@
-package me.superischroma.spectaculation.gui;
+package me.superischroma.spectaculation.merchant;
 
+import me.superischroma.spectaculation.gui.GUI;
+import me.superischroma.spectaculation.gui.GUIClickableItem;
+import me.superischroma.spectaculation.gui.GUIOpenEvent;
+import me.superischroma.spectaculation.gui.ShopTradingOptionsGUI;
 import me.superischroma.spectaculation.item.SItem;
 import me.superischroma.spectaculation.item.SpecificItemType;
 import me.superischroma.spectaculation.user.User;
 import me.superischroma.spectaculation.util.PaginationList;
-import me.superischroma.spectaculation.util.SLog;
 import me.superischroma.spectaculation.util.SUtil;
 import me.superischroma.spectaculation.util.StackArrayList;
 import org.bukkit.ChatColor;
@@ -114,7 +117,8 @@ public class ShopGUI extends GUI
             {
                 if (!BUYBACK_HISTORY.containsKey(uuid) || BUYBACK_HISTORY.get(player.getUniqueId()).size() == 0)
                     return;
-                long value = buyback.last().getType().getStatistics().getValue() * buyback.last().getStack().getAmount();
+                if (buyback.last() == null) return;
+                long value = buyback.last().getItemValue() * buyback.last().getStack().getAmount();
                 if (value > user.getCoins())
                 {
                     player.sendMessage(ChatColor.RED + "You don't have enough coins!");
@@ -147,7 +151,7 @@ public class ShopGUI extends GUI
                 List<String> lore = meta.getLore();
                 lore.add(" ");
                 lore.add(ChatColor.GRAY + "Cost");
-                long price = last.getType().getStatistics().getValue() * last.getStack().getAmount();
+                long price = last.getItemValue() * last.getStack().getAmount();
                 lore.add(ChatColor.GOLD + SUtil.commaify(price) + " Coin" + (price != 1 ? "s" : ""));
                 lore.add(" ");
                 lore.add(ChatColor.YELLOW + "Click to buyback!");
@@ -168,7 +172,8 @@ public class ShopGUI extends GUI
             List<String> lore = meta.getLore();
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Cost");
-            long price = item.getType().getStatistics().getPrice() * item.getStack().getAmount();
+            if (item.getPrice() == null) return;
+            long price = item.getPrice() * item.getStack().getAmount();
             lore.add(ChatColor.GOLD + SUtil.commaify(price) + " Coin" + (price != 1 ? "s" : ""));
             lore.add(" ");
             lore.add(ChatColor.YELLOW + "Click to trade!");
@@ -236,8 +241,9 @@ public class ShopGUI extends GUI
             BUYBACK_HISTORY.put(player.getUniqueId(), new StackArrayList<>());
             buyback = BUYBACK_HISTORY.get(player.getUniqueId());
         }
+        if (item.getItemValue() == null) return;
         buyback.push(item.clone());
-        long value = item.getType().getStatistics().getValue() * item.getStack().getAmount();
+        long value = item.getItemValue() * item.getStack().getAmount();
         user.addCoins(value);
         player.playSound(player.getLocation(), Sound.NOTE_PLING, 1f, 2f);
         player.sendMessage(ChatColor.GREEN + "You sold " + item.getFullName() +

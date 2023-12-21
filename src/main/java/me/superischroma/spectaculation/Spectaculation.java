@@ -18,6 +18,7 @@ import me.superischroma.spectaculation.listener.BlockListener;
 import me.superischroma.spectaculation.listener.PlayerListener;
 import me.superischroma.spectaculation.listener.ServerPingListener;
 import me.superischroma.spectaculation.listener.WorldListener;
+import me.superischroma.spectaculation.merchant.MerchantItemHandler;
 import me.superischroma.spectaculation.npc.SkyblockNPC;
 import me.superischroma.spectaculation.npc.SkyblockNPCManager;
 import me.superischroma.spectaculation.region.Region;
@@ -117,6 +118,8 @@ public final class Spectaculation extends JavaPlugin
         EntitySpawner.startSpawnerTask();
         SLog.info("Establishing player regions...");
         Region.cacheRegions();
+        SLog.info("Loading merchants items...");
+        MerchantItemHandler.init();
         SLog.info("Loading auction items from disk...");
         AuctionItem.loadAuctionsFromDisk();
         SkyBlockCalendar.ELAPSED = plugin.config.getLong("timeElapsed");

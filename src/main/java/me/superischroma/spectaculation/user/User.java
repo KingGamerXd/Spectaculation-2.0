@@ -23,6 +23,7 @@ import me.superischroma.spectaculation.potion.PotionEffectType;
 import me.superischroma.spectaculation.region.Region;
 import me.superischroma.spectaculation.region.RegionType;
 import me.superischroma.spectaculation.slayer.SlayerQuest;
+import me.superischroma.spectaculation.util.SLog;
 import me.superischroma.spectaculation.util.SUtil;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import org.bukkit.*;
@@ -139,6 +140,7 @@ public class User
 
     public void load()
     {
+        SLog.info("loading data");
         this.uuid = UUID.fromString(config.getString("uuid"));
         if (config.contains("collections"))
         {
