@@ -243,6 +243,7 @@ public enum SMaterial
     COUTURE_RUNE(Material.SKULL_ITEM, CoutureRune.class),
     // Pets
     ENDERMAN_PET(Material.SKULL_ITEM, EndermanPet.class),
+    ROCK_PET(Material.SKULL_ITEM, RockPet.class)
     GUNGA_PET(Material.SKULL_ITEM, GungaPet.class),
     // Craft Materials
     AIR(Material.AIR),
