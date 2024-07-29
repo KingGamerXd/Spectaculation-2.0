@@ -83,6 +83,9 @@ public enum SMaterial
     ASPECT_OF_THE_JERRY(Material.WOOD_SWORD, AspectOfTheJerry.class),
     ROGUE_SWORD(Material.GOLD_SWORD, RogueSword.class),
     EMERALD_BLADE(Material.EMERALD, EmeraldBlade.class),
+    HYPERION(Material.IRON_SWORD, Hyperion.class),
+    GIANT_SWORD(Material.IRON_SWORD, GiantSword.class),
+    SOUL_WHIP(Material.FISHING_ROD, SoulWhip.class),
     // Dragon Assets
     SUMMONING_EYE(Material.SKULL_ITEM, SummoningEye.class),
     SLEEPING_EYE(Material.SKULL_ITEM, SleepingEye.class),
@@ -243,6 +246,7 @@ public enum SMaterial
     COUTURE_RUNE(Material.SKULL_ITEM, CoutureRune.class),
     // Pets
     ENDERMAN_PET(Material.SKULL_ITEM, EndermanPet.class),
+    ROCK_PET(Material.SKULL_ITEM, RockPet.class)
     GUNGA_PET(Material.SKULL_ITEM, GungaPet.class),
     // Craft Materials
     AIR(Material.AIR),
